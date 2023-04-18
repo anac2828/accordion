@@ -1,0 +1,185 @@
+@mixin animateDefault{
+  @media(prefers-reduced-motion: no-preference){
+    @content
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+img {
+  min-width: 100%;
+  display: block;
+}
+
+
+
+.accordion {
+  --_button-size: 3rem;
+  --_panel-padding: .75rem;
+  --_panel-gap: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--_panel-gap);
+  
+  
+  @media (min-width: 45em){
+    flex-direction: row;
+  }
+  
+  max-width: 70%;
+  margin-top: 4rem;
+  
+  &__panel {
+    cursor: pointer;
+    position: relative;
+    flex-basis: calc((var(--_panel-padding) * 2) + var(--_button-size));
+    overflow: hidden;
+    padding: var(--_panel-padding);
+    border-radius: calc(((var(--_panel-padding) * 2) + var(--_button-size)) / 2);
+    
+    @include animateDefault{
+      transition: flex-basis .5s, flex-grow .5s;
+    }
+  }
+
+  &__panel:has([aria-expanded="true"]){
+    outline: 3px solid var(--_panel-color);
+    outline-offset: 4px;
+    flex-basis: clamp(15rem, 40vh, 20rem);
+    flex-grow: 1;
+  }
+
+      
+  &__panel:has([aria-expanded="true"]) p{
+    translate: 0 0;
+    opacity: 1;
+
+      @include animateDefault{
+      transition: all .5s .5s;
+    }
+  }
+
+  &__panel:has([aria-expanded="true"]) img{
+    filter: brightness(.5);
+  }
+
+  &__panel:focus-within, &__panel:hover{
+    outline: 3px solid var(--_panel-color);
+    outline-offset: 4px;
+  }
+
+
+  &__content > p{
+    translate: 0 2rem;
+    opacity: 0;
+    margin-left: calc(var(--_button-size) + var(--_panel-gap));
+
+    @media (max-width: 44.999em){
+      margin-top: 1rem;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: filter .5s;
+  }
+
+  &__title{
+    font-size: 1.75rem;
+    font-weight: 700;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+
+    @media (max-width: 44.999em){
+
+      &::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        left: calc((var(--_button-size) + var(--_panel-gap)) * -1);
+        width: calc(100% + var(--_button-size) * 2);
+        height: var(--_button-size);
+        background: hsl(0 0% 0% / .5);
+        z-index: -1;
+        border-radius: 100vw;
+      }
+    }
+  }
+
+  // button
+  &__trigger {
+    outline: 0;
+    background-color: transparent;
+    border: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: row-reverse;
+  }
+
+  &__icon {
+    cursor: pointer;
+    fill: var(--_panel-color);
+    background: hsl(0 0% 0% / .55);
+    width: var(--_button-size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 0.75rem;
+    z-index: 10;
+  }
+
+  &__panel--boating {
+    --_panel-color: hsl(160, 70%, 50%)
+  }
+
+  &__panel--anchors{
+    --_panel-color: hsl(184, 70%, 50%)
+  }
+
+  &__panel--fishing{
+    --_panel-color: hsl(220, 70%, 50%)
+  }
+
+  &__panel--lighthouse{
+    --_panel-color: hsl(350, 70%, 50%)
+  }
+
+  &__panel--coral{
+    --_panel-color: hsl(20, 70%, 50%)
+  }
+}
+
+
+
+
+
+
+
